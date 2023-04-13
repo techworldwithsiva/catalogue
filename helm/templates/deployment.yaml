@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue
+  namespace: roboshop
+  labels:
+    name: catalogue
+    tier: app
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  selector:
+    matchLabels:
+      name: catalogue
+      tier: app
+  template:
+    metadata:
+      labels:
+        name: catalogue
+        tier: app
+    spec:
+      containers:
+      - name: catalogue
+        imagePullPolicy: Always
+        image: "techworldwithsiva/catalogue:{{ .Values.deployment.imageVersion }}"
+        envFrom:
+        - configMapRef:
+            name: catalogue-config
+        ports:
+        - containerPort: 8080
